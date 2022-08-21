@@ -1,0 +1,16 @@
+{
+  "name": "bookdb",
+  "description": "Simple book database with an http interface.",
+  "repository": "github:koskinen-jam/bookdb",
+  "private": true,
+  "author": {
+    "name": "Janne Koskinen",
+    "email": "jkoskinen@gmail.com"
+  },
+  "dependencies": {
+    "sqlite3": "^5.0.11"
+  },
+  "scripts": {
+    "test": "echo 'kippari'"  
+  }
+}

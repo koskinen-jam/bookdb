@@ -1,0 +1,488 @@
+# Post a new book
+POST http://localhost:9000/books
+Content-Type: application/json
+
+{
+        "title": "Harry Potter and the Philosophers Stone",
+        "author": "J.K. Rowling",
+        "year": 1997,
+        "publisher": "Bloomsbury (UK)",
+        "description": "A book about a wizard boy"
+}
+
+
+# Response
+200 OK
+
+{
+        "id": 1
+}
+
+
+#################################################################################
+
+# Post another book without a publisher
+POST http://localhost:9000/books
+Content-Type: application/json
+
+{
+        "title": "Old Testament",
+        "author": "Various",
+        "year": -165,
+        "description": "A holy book of Christianity and Jewish faith"
+}
+
+# Response
+200 OK
+
+{
+        "id": 2
+}
+
+
+#################################################################################
+
+# Post third book without description
+POST http://localhost:9000/books
+Content-Type: application/json
+
+{
+        "title": "The Subtle Knife",
+        "author": "Philip Pullman",
+        "year": 1997,
+        "publisher": "Scholastic Point"
+}
+
+# Response
+200 OK
+
+{
+        "id": 3
+}
+
+
+#################################################################################
+
+# Post fourth book
+POST http://localhost:9000/books
+Content-Type: application/json
+
+{
+        "title": "Goosebumps: Beware, the Snowman",
+        "author": "R.L. Stine",
+        "year": 1997,
+        "publisher": "Scholastic Point"
+}
+
+# Response
+200 OK
+
+{
+        "id": 4
+}
+
+
+#################################################################################
+
+# Try to post a book with missing title
+POST http://localhost:9000/books
+Content-Type: application/json
+
+{
+        "author": "Douglas Adams",
+        "year": 1979,
+        "publisher": "Pan Books",
+        "description": "Originally a radio series"
+}
+
+# Response
+400 Bad Request
+
+#################################################################################
+
+# Try to post a book with missing author
+POST http://localhost:9000/books
+Content-Type: application/json
+
+{
+        "title": "The Hitchhiker's Guide to the Galaxy",
+        "author": "Douglas Adams",
+        "publisher": "Pan Books",
+        "description": "Originally a radio series"
+}
+
+# Response
+400 Bad Request
+
+#################################################################################
+
+# Try to post a book with missing year
+POST http://localhost:9000/books
+Content-Type: application/json
+
+{
+        "author": "Douglas Adams",
+        "title": "The Hitchhiker's Guide to the Galaxy",
+        "pages": 208,
+        "description": "Originally a radio series"
+}
+
+# Response
+400 Bad Request
+
+#################################################################################
+
+# Try to post a book with empty author
+POST http://localhost:9000/books
+Content-Type: application/json
+
+{
+        "author": "",
+        "title": "The Hitchhiker's Guide to the Galaxy",
+        "year": 1979,
+        "publisher": "Pan Books",
+        "description": "Originally a radio series"
+}
+
+# Response
+400 Bad Request
+
+#################################################################################
+
+# Try to post a book with empty title
+POST http://localhost:9000/books
+Content-Type: application/json
+
+{
+        "author": "Douglas Adams",
+        "title": "",
+        "year": 1979,
+        "publisher": "Pan Books",
+        "description": "Originally a radio series"
+}
+
+# Response
+400 Bad Request
+
+#################################################################################
+
+# Try to post a book with non-integer year
+POST http://localhost:9000/books
+Content-Type: application/json
+
+{
+        "author": "Douglas Adams",
+        "title": "",
+        "year": 1979,999,
+        "publisher": "Pan Books",
+        "description": "Originally a radio series"
+}
+
+# Response
+400 Bad Request
+
+#################################################################################
+
+# Try to post a book with another non-integer year
+POST http://localhost:9000/books
+Content-Type: application/json
+
+{
+        "author": "Douglas Adams",
+        "title": "",
+        "year": "nineteen-ninety-seven",
+        "publisher": "Pan Books",
+        "description": "Originally a radio series"
+}
+
+# Response
+400 Bad Request
+
+#################################################################################
+
+# Try to post a book with empty publisher
+POST http://localhost:9000/books
+Content-Type: application/json
+
+{
+        "author": "Douglas Adams",
+        "title": "",
+        "year": 1979,
+        "publisher": "",
+        "description": "Originally a radio series"
+}
+
+# Response
+400 Bad Request
+
+#################################################################################
+
+# Try to post the same book again with same author, title and year
+POST http://localhost:9000/books
+Content-Type: application/json
+
+{
+        "title": "Harry Potter and the Philosophers Stone",
+        "author": "J.K. Rowling",
+        "year": 1997,
+        "publisher": "Bloomsbury (UK)",
+        "description": "A book about a wizard boy"
+}
+
+# Response
+400 Bad Request
+
+#################################################################################
+
+# Try to post an invalid JSON
+POST http://localhost:9000/books
+Content-Type: application/json
+
+{
+        "whoops"
+}
+
+# Response
+400 Bad Request
+
+#################################################################################
+
+# Get all books
+GET http://localhost:9000/books
+
+# Response
+200 OK
+
+[
+  {
+    "id": 1,
+    "title": "Harry Potter and the Philosophers Stone",
+    "author": "J.K. Rowling",
+    "year": 1997,
+    "publisher": "Bloomsbury (UK)",
+    "description": "A book about a wizard boy"
+  },
+  {
+    "id": 2,
+    "title": "Old Testament",
+    "author": "Various",
+    "year": -165,
+    "publisher": null,
+    "description": "A holy book of Christianity and Jewish faith"
+  },
+  {
+    "id": 3,
+    "title": "The Subtle Knife",
+    "author": "Philip Pullman",
+    "year": 1997,
+    "publisher": "Scholastic Point",
+    "description": null
+  },
+  {
+    "id": 4,
+    "title": "Goosebumps: Beware, the Snowman",
+    "author": "R.L. Stine",
+    "year": 1997,
+    "publisher": "Scholastic Point",
+    "description": null
+  }
+]
+
+#################################################################################
+
+# Get books by author
+GET http://localhost:9000/books?author=J%2EK%2E%20Rowling
+
+# Response
+200 OK
+
+[
+  {
+    "id": 1,
+    "title": "Harry Potter and the Philosophers Stone",
+    "author": "J.K. Rowling",
+    "year": 1997,
+    "publisher": "Bloomsbury (UK)",
+    "description": "A book about a wizard boy"
+  }
+]
+
+#################################################################################
+
+# Get books by year
+GET http://localhost:9000/books?year=1997
+
+# Response
+200 OK
+
+[
+  {
+    "id": 1,
+    "title": "Harry Potter and the Philosophers Stone",
+    "author": "J.K. Rowling",
+    "year": 1997,
+    "publisher": "Bloomsbury (UK)",
+    "description": "A book about a wizard boy"
+  },
+  {
+    "id": 3,
+    "title": "The Subtle Knife",
+    "author": "Philip Pullman",
+    "year": 1997,
+    "publisher": "Scholastic Point",
+    "description": null
+  },
+  {
+    "id": 4,
+    "title": "Goosebumps: Beware, the Snowman",
+    "author": "R.L. Stine",
+    "year": 1997,
+    "publisher": "Scholastic Point",
+    "description": null
+  }
+]
+
+#################################################################################
+
+# Get books by publisher
+GET http://localhost:9000/books?publisher=Otava
+
+# Response
+200 OK
+
+[]
+
+#################################################################################
+
+# Get books by year and publisher
+GET http://localhost:9000/books?year=1997&publisher=scholastic%20point
+
+# Response
+200 OK
+
+[
+  {
+    "id": 3,
+    "title": "The Subtle Knife",
+    "author": "Philip Pullman",
+    "year": 1997,
+    "publisher": "Scholastic Point",
+    "description": null
+  },
+  {
+    "id": 4,
+    "title": "Goosebumps: Beware, the Snowman",
+    "author": "R.L. Stine",
+    "year": 1997,
+    "publisher": "Scholastic Point",
+    "description": null
+  }
+]
+
+#################################################################################
+
+# Get a single book
+GET http://localhost:9000/books/1
+
+# Response
+200 OK
+
+{
+  "id": 1,
+  "title": "Harry Potter and the Philosophers Stone",
+  "author": "J.K. Rowling",
+  "year": 1997,
+  "publisher": "Bloomsbury (UK)",
+  "description": "A book about a wizard boy"
+}
+
+#################################################################################
+
+# Try to get a non-existing book
+GET http://localhost:9000/books/0
+
+# Response
+404 Not Found
+
+#################################################################################
+
+# Try to get a book with a non-integer id
+GET http://localhost:9000/books/x
+
+# Response
+404 Not Found
+
+#################################################################################
+
+# Try to get a book with another non-integer id
+GET http://localhost:9000/books/1.5
+
+# Response
+404 Not Found
+
+#################################################################################
+
+# Delete an existing book from the database
+DELETE http://localhost:9000/books/1
+
+# Response
+204 No Content
+
+#################################################################################
+
+# Try to delete a non-existing book
+DELETE http://localhost:9000/books/0
+
+# Response
+404 Not Found
+
+#################################################################################
+
+# Try to delete a book with a non-integer id
+DELETE http://localhost:9000/books/x
+
+# Response
+404 Not Found
+
+#################################################################################
+
+# Try to delete another book with a non-integer id
+DELETE http://localhost:9000/books/1.5
+
+# Response
+404 Not Found
+
+#################################################################################
+
+# Try again getting all the books
+GET http://localhost:9000/books
+
+# Response
+200 OK
+
+[
+  {
+    "id": 2,
+    "title": "Old Testament",
+    "author": "Various",
+    "year": -165,
+    "publisher": null,
+    "description": "A holy book of Christianity and Jewish faith"
+  },
+  {
+    "id": 3,
+    "title": "The Subtle Knife",
+    "author": "Philip Pullman",
+    "year": 1997,
+    "publisher": "Scholastic Point",
+    "description": null
+  },
+  {
+    "id": 4,
+    "title": "Goosebumps: Beware, the Snowman",
+    "author": "R.L. Stine",
+    "year": 1997,
+    "publisher": "Scholastic Point",
+    "description": null
+  }
+]

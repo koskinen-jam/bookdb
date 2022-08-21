@@ -1,3 +1,5 @@
+# .gitignore for a node project, courtesy of Github
+
 # Logs
 logs
 *.log

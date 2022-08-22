@@ -81,7 +81,9 @@ const requestResponseParser = (s) => {
 	try {
 		r.response.body = JSON.parse(response.join("\n"));
 	} catch (e) {
-		r.response.body = response.join("\n");
+		// Something along the way turns empty response bodies into
+		// empty objects, so let's expect that if we fail to parse.
+		r.response.body = {};
 	}
 
 	return r;
@@ -99,7 +101,12 @@ test('Loaded test cases', () => { expect(cases.length).toBeGreaterThan(0); });
 // Test server responses
 const request = require('supertest');
 
-const app = require('../src/app.js');
+jest.setTimeout(1000);
+
+const { DB } = require('../src/database.js');
+const db = new DB(':memory:');
+
+const app = require('../src/app.js').init(db);
 
 for (let c of cases) {
 	test(c.case, async () => {

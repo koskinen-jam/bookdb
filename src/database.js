@@ -33,6 +33,10 @@ class DB {
 		) ? true : false;
 	}
 
+	isOpen() {
+		return this.db.open;
+	}
+
 	// Fetch all matching rows
 	fetch(sql, params) {
 		let stm = this.db.prepare(sql);

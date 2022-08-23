@@ -9,29 +9,33 @@ Simple book database with an http API for adding, deleting and reading books.
   * NodeJS 16.17 or newer
   * Npm 8.18 or newer
 
-## Installation and running
+## Installation
 
-1. Clone this repo to installation directory.
+Create desired installation directory if it does not exist, and cd into it.
+
+Clone this repo to installation directory.
 ```
-~ $ git clone https://github.com/koskinen-jam/bookdb.git bookdb
-```
-2. Install dependencies.
-```
-~/bookdb $ npm install
-```
-3. Run server.
-  * With npm lifecycle script:
-```
-~/bookdb $ npm run server
-```
-  * With node:
-```
-~/bookdb $ node src/main.js
+git clone https://github.com/koskinen-jam/bookdb.git .
 ```
 
-## Tests
-
-Unit tests have their own npm script:
+Install dependencies.
 ```
-~/bookdb $ npm test
+npm install
+```
+
+## Usage
+
+Start server with npm.
+```
+npm run server
+```
+
+Run unit tests with npm.
+```
+npm test
+```
+
+List available options.
+```
+npm run server -- --help
 ```

@@ -12,6 +12,7 @@ Simple book database with an http API for adding, deleting and reading books.
 ## Installation
 
 Create desired installation directory if it does not exist, and cd into it.
+The following commands should be run in the installation directory.
 
 Clone this repo to installation directory.
 ```

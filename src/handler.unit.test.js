@@ -84,5 +84,4 @@ describe('Registering callbacks', () => {
 	test('delete registered', () => {
 		expect(defs).toContainEqual(['/foo', { delete: true }]);
 	});
-
 });

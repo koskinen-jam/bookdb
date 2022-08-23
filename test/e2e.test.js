@@ -108,30 +108,32 @@ const db = new DB(':memory:');
 
 const app = require('../src/app.js').init(db);
 
-for (let c of cases) {
-	test(c.case, async () => {
-		let res;
-		switch (c.request.method) {
-			case 'DELETE':
-				res = await request(app).delete(c.request.path);
-				break;
-			case 'GET':
-				res = await request(app).get(c.request.path);
-				break;
-			case 'POST':
-				res = await request(app)
-					.post(c.request.path)
-					.set(
-						'Content-Type',
-						c.request.headers['Content-Type']
-					)
-					.send(c.request.body);
-				break;
-			default:
-				break;
-		}
+describe('Request-response sequence', () => {
+	for (let c of cases) {
+		test(c.case, async () => {
+			let res;
+			switch (c.request.method) {
+				case 'DELETE':
+					res = await request(app).delete(c.request.path);
+					break;
+				case 'GET':
+					res = await request(app).get(c.request.path);
+					break;
+				case 'POST':
+					res = await request(app)
+						.post(c.request.path)
+						.set(
+							'Content-Type',
+							c.request.headers['Content-Type']
+						)
+						.send(c.request.body);
+					break;
+				default:
+					break;
+			}
 
-		expect(res.status).toEqual(c.response.status);
-		expect(res.body).toEqual(c.response.body);
-	});
-}
+			expect(res.status).toEqual(c.response.status);
+			expect(res.body).toEqual(c.response.body);
+		});
+	}
+});

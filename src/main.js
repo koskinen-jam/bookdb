@@ -1,3 +1,8 @@
+/**
+ * Book database server
+ */
+
+/** Command-line arguments */
 const args = require('minimist')(process.argv.slice(2));
 
 if (args.help) {
@@ -30,8 +35,10 @@ Arguments
 	process.exit(0);
 }
 
+/** Api port on localhost */
 const port = args.port ?? 9000;
 
+/** Database file path */
 const dbpath = args.database ?? 'books.db';
 
 if (dbpath.match(/^\/.*/) || dbpath.match(/\.\./)) {
@@ -39,10 +46,16 @@ if (dbpath.match(/^\/.*/) || dbpath.match(/\.\./)) {
 	process.exit(1);
 }
 
+/** Database class */
 const { DB } = require('./database.js');
+
+/** Database instance */
 const db = new DB(dbpath);
+
+/** Application instance */
 const app = require('./app.js').init(db);
 
+/** Active server instance */
 const server = app.listen(port, () => console.log(`Listening at port ${port}.`));
 
 process.on('exit', (code) => {

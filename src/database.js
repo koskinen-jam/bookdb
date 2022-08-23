@@ -1,8 +1,20 @@
+/**
+ * Book database wrapper
+ */
+
+/** Database interface */
 const sqlite3 = require('better-sqlite3');
 
-// Database wrapper with automated schema initialization.
+/**
+ * Class with book database schema handling and convenience methods for
+ * SQL queries.
+ */
 class DB {
-	// Open a database and set up the books table if not already there. 
+	/**
+	 * Create a database instance, creating a books table if it does not exist.
+	 * @param {string} dbpath - Database file path
+	 * @param {object} options - sqlite3 constructor options
+	 */
 	constructor(dbpath, options) {
 		this.db = new sqlite3(dbpath, options);
 
@@ -24,7 +36,10 @@ class DB {
 
 	}
 
-	// Return true if the books table exists
+	/**
+	 * Check if books table exists.
+	 * @return {boolean} True if table exists.
+	 */
 	hasBooksTable() {
 		return this.fetchColumn(`
 			SELECT 1
@@ -33,40 +48,70 @@ class DB {
 		) ? true : false;
 	}
 
+	/**
+	 * Check if database is open.
+	 * @return {boolean} True if open.
+	 */
 	isOpen() {
 		return this.db.open;
 	}
 
-	// Fetch all matching rows
+	/**
+	 * Run a query returning all the result rows.
+	 * @param {string} sql - Query SQL
+	 * @param {object} params - Bind values
+	 * @return {array}
+	 */
 	fetch(sql, params) {
 		let stm = this.db.prepare(sql);
 		return params === undefined ? stm.all() : stm.all(params);
 	}
 
-	// Fetch first matching row
+	/**
+	 * Run a query returning a single row.
+	 * @param {string} sql - Query SQL
+	 * @param {object} params - Bind values
+	 * @return {object}
+	 */
 	fetchRow(sql, params) {
 		let stm = this.db.prepare(sql);
 		return params === undefined ? stm.get() : stm.get(params);
 	}
 
-	// Fetch first column of first matching row
+	/**
+	 * Run a query returning the first column of the first row.
+	 * @param {string} sql - Query SQL
+	 * @param {object} params - Bind values
+	 * @return {(number|boolean|string)} 
+	 */
 	fetchColumn(sql, params) {
 		let stm = this.db.prepare(sql).pluck();
 		return params === undefined ? stm.get() : stm.get(params);
 	}
 
-	// Execute a statement
+	/**
+	 * Run a query returning an object with number of affected rows
+	 * in 'changes' and id of last inserted row in 'lastInsertRowid'
+	 * @param {string} sql - Query SQL
+	 * @param {object} params - Bind values
+	 * @return {object} 
+	 */
 	run(sql, params) {
 		let stm = this.db.prepare(sql);
 		return params === undefined ? stm.run() : stm.run(params);
 	}
 
-	// Execute SQL with multiple statements
+	/**
+	 * Run multiple sql queries in one string.
+	 * @param {string} sql - Query SQL
+	 */
 	exec(sql) {
 		this.db.exec(sql);
 	}
 
-	// Close connection
+	/**
+	 * Close database
+	 */
 	close() {
 		this.db.close();
 	}

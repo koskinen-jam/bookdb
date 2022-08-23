@@ -2,10 +2,14 @@
 // 
 // Exports function init(app, database) that creates aforementioned handlers
 // using given database as data source and registers them to an express instance.
+/** Base handler class */
 const { Handler } = require('../handler.js');
 
-// Helpful helper functions
-
+/**
+ * Parse an integer id from a string.
+ * @param {string} str
+ * @return {(boolean|number)} false if unable to parse, parsed number otherwise.
+ */
 const parseId = (str) => {
 	if (! str.match(/^\d+(|\.0+)$/)) {
 		return false;
@@ -17,6 +21,11 @@ const parseId = (str) => {
 	return id;
 };
 
+/**
+ * Parse an integer year from a string.
+ * @param {string} str
+ * @return {(boolean|number)} false if unable to parse, parsed number otherwise.
+ */
 const parseYear = (str) => {
 	if (! str.match(/^-?\d+(|\.0+)$/)) {
 		return false;
@@ -28,6 +37,11 @@ const parseYear = (str) => {
 	return year;
 };
 
+/**
+ * Check if an object is empty
+ * @param {object} obj
+ * @return {boolean} true if object has no keys.
+ */
 const isEmpty = (obj) => {
 	for (let key in obj) {
 		return false;
@@ -35,11 +49,13 @@ const isEmpty = (obj) => {
 	return true;
 };
 
-// List and creation endpoint handler generator
-
+/** Path of list/post books actions */
 const noIdPath = '/books';
+
+/** Create list/search and post action handlers */
 const noIdCallbacks = (db) => {
 	return {
+		/** List or search books */
 		get: (req, res) => {
 			if (isEmpty(req.query)) {
 				let data = db.fetch('SELECT * FROM books');
@@ -87,6 +103,7 @@ const noIdCallbacks = (db) => {
 			return res.status(200).json(data);
 		},
 
+		/** Create a book */
 		post: (req, res) => {
 			let newBook = {
 				title: req.body.title ?? null,
@@ -110,11 +127,16 @@ const noIdCallbacks = (db) => {
 	};
 };
 
-// Read and delete handler generator
-
+/** Route of get/delete single book by id */
 const pathWithId = '/books/:id';
+
+/**
+ * Create resolver callbacks for getting and deleting a single book
+ * @param {DB} db - Database instance
+ */
 const callbacksWithId = (db) => {
 	return {
+		/** Return a single book by id */
 		get: (req, res) => {
 			let id = parseId(req.params.id);
 
@@ -130,6 +152,7 @@ const callbacksWithId = (db) => {
 			return res.status(200).json(book);
 		},
 
+		/** Delete a book by id */
 		delete: (req, res) => {
 			let id = parseId(req.params.id);
 
@@ -152,8 +175,13 @@ const callbacksWithId = (db) => {
 	};
 };
 
-// Handler initializer
 
+/**
+ * Initialize handlers for '/books' and '/books/:id' and apply them to an
+ * express instance.
+ * @param {express} app - Express instance.
+ * @param {DB} db - Database instance.
+ */
 const init = (app, db) => {
 	(new Handler(noIdPath, noIdCallbacks(db))).registerPaths(app);
 	(new Handler(pathWithId, callbacksWithId(db))).registerPaths(app);

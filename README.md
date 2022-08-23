@@ -1,2 +1,3 @@
 # bookdb
-Introductory backend developer task for Buutti Oy.
+
+Simple book database with an http API for adding, deleting and reading books.

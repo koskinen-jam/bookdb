@@ -1,53 +1,8 @@
-// Handlers for /books and /books/{id}.
-// 
-// Exports function init(app, database) that creates aforementioned handlers
-// using given database as data source and registers them to an express instance.
 /** Base handler class */
 const { Handler } = require('../handler.js');
 
-/**
- * Parse an integer id from a string.
- * @param {string} str
- * @return {(boolean|number)} false if unable to parse, parsed number otherwise.
- */
-const parseId = (str) => {
-	if (! str.match(/^\d+(|\.0+)$/)) {
-		return false;
-	}
-	let id = parseInt(str);
-	if (! id || id === 'NaN') {
-		return false;
-	}
-	return id;
-};
-
-/**
- * Parse an integer year from a string.
- * @param {string} str
- * @return {(boolean|number)} false if unable to parse, parsed number otherwise.
- */
-const parseYear = (str) => {
-	if (! str.match(/^-?\d+(|\.0+)$/)) {
-		return false;
-	}
-	let year = parseInt(str);
-	if (year === 'NaN') {
-		return false;
-	}
-	return year;
-};
-
-/**
- * Check if an object is empty
- * @param {object} obj
- * @return {boolean} true if object has no keys.
- */
-const isEmpty = (obj) => {
-	for (let key in obj) {
-		return false;
-	}
-	return true;
-};
+/** Validation helpers */
+const validation = require('../validation.js');
 
 /** Books handler paths */
 const paths = {
@@ -61,7 +16,7 @@ const paths = {
  */
 const listBooks = (db) => {
 	return (req, res) => {
-		if (isEmpty(req.query)) {
+		if (validation.isEmpty(req.query)) {
 			let data = db.fetch('SELECT * FROM books');
 			return res.status(200).json(data);
 		}
@@ -80,7 +35,7 @@ const listBooks = (db) => {
 					params[k] = req.query[k];
 					break;
 				case 'year':
-					let y = parseYear(req.query[k]);
+					let y = validation.parseYear(req.query[k]);
 					if (y === false) {
 						return res.sendStatus(400);
 					}
@@ -157,7 +112,7 @@ const createBook = (db) => {
  */
 const getBook = (db) => {
 	return (req, res) => {
-		let id = parseId(req.params.id);
+		let id = validation.parseId(req.params.id);
 
 		if (id === false) {
 			return res.sendStatus(404);
@@ -178,7 +133,7 @@ const getBook = (db) => {
  */
 const deleteBook = (db) => {
 	return (req, res) => {
-		let id = parseId(req.params.id);
+		let id = validation.parseId(req.params.id);
 
 		if (id === false) {
 			return res.sendStatus(404);
@@ -222,4 +177,8 @@ const init = (app, db) => {
 	)).registerPaths(app);
 };
 
+/**
+ * Books handler
+ * @exports BooksHandler
+ */
 module.exports.init = init;

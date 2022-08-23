@@ -40,3 +40,8 @@ List available options.
 ```
 npm run server -- --help
 ```
+
+## Known issues
+
+* API sends a templated HTML response when request body contains invalid JSON, although HTTP code is correct. Happens when querying the live API using curl, tests appear unaffected. Response contains a stacktrace unless server is started in production mode with `NODE_ENV=production npm run server`.
+  * Applying rudimentary error-handling middleware had no apparent effect, though there is a high chance it was not applied correctly.

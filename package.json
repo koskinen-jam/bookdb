@@ -9,9 +9,11 @@
   },
   "dependencies": {
     "better-sqlite3": "^7.6.2",
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "minimist": "^1.2.6"
   },
   "scripts": {
+    "server": "node src/main.js",
     "test": "jest"
   },
   "devDependencies": {

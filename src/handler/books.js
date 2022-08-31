@@ -72,10 +72,14 @@ const createBook = (db) => {
 		let newBook = {
 			title: req.body.title ?? null,
 			author: req.body.author ?? null,
-			year: validation.parseYear(req.body.year ?? null),
+			year: req.body.year ?? null,
 			publisher: req.body.publisher ?? null,
 			description: req.body.description ?? null,
 		};
+
+		if (newBook.year !== null) {
+			newBook.year = validation.parseYear(newBook.year);
+		}
 
 		let saved;
 		try {

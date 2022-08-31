@@ -20,6 +20,9 @@ const parseId = (str) => {
  * @return {(boolean|number)} false if unable to parse, parsed number otherwise.
  */
 const parseYear = (str) => {
+	if (str === null || str === undefined) {
+		return false;
+	}
 	if (! str.match(/^-?\d+(|\.0+)$/)) {
 		return false;
 	}

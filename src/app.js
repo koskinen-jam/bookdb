@@ -4,7 +4,17 @@
 
 const express = require('express');
 const app = express();
-app.use(express.json())
+
+app.use(express.json());
+
+// Handle JSON parsing errors here
+app.use(function (err, req, res, next) {
+	if (err.type === 'entity.parse.failed') {
+		res.sendStatus(400);
+	} else {
+		res.sendStatus(500);
+	}
+});
 
 const BooksHandler = require('./handler/books.js');
 
@@ -15,6 +25,7 @@ const BooksHandler = require('./handler/books.js');
  */
 module.exports.init = (database) => {
 	BooksHandler.init(app, database);
+	
 	return app;
 }
 

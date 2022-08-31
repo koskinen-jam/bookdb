@@ -15,7 +15,8 @@ const parseId = (str) => {
 };
 
 /**
- * Parse an integer year from a string.
+ * Parse given value into an integer for use as a year. Allows any number of
+ * decimal zeroes.
  * @param {string} str
  * @return {(boolean|number)} false if unable to parse, parsed number otherwise.
  */

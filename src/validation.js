@@ -23,6 +23,12 @@ const parseYear = (str) => {
 	if (str === null || str === undefined) {
 		return false;
 	}
+	if (typeof str === 'number') {
+		if (Math.floor(str) === str) {
+			return Math.floor(str);
+		}
+		return false;
+	}
 	if (! str.match(/^-?\d+(|\.0+)$/)) {
 		return false;
 	}

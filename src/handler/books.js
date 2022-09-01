@@ -79,6 +79,12 @@ const createBook = (db) => {
 
 		if (newBook.year !== null) {
 			newBook.year = validation.parseYear(newBook.year);
+			if (newBook.year === false) {
+				// If the year is not good, fail the request here
+				// to avoid dealing with the TypeError when trying
+				// to insert a false.
+				return res.sendStatus(400);
+			}
 		}
 
 		let saved;
@@ -101,7 +107,13 @@ const createBook = (db) => {
 				newBook
 			);
 		} catch (err) {
-			return res.sendStatus(400);
+			if (err.code && err.code.match(/SQLITE_CONSTRAINT/, 'i')) {
+				// Bad title or author, or not unique.
+				return res.sendStatus(400);
+			}
+			// Something unexpected went wrong, kick it up to the
+			// general error handler.
+			throw err;
 		}
 
 		return res.status(200).json({

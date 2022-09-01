@@ -25,7 +25,12 @@ const BooksHandler = require('./handler/books.js');
  */
 module.exports.init = (database) => {
 	BooksHandler.init(app, database);
-	
+
+	// Last-ditch error handler for catching e.g. database errors
+	app.use(function (err, req, res, next) {
+		res.sendStatus(500);
+	});
+
 	return app;
 }
 

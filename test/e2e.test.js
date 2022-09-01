@@ -134,6 +134,9 @@ describe('Request-response sequence', () => {
 
 			expect(res.status).toEqual(c.response.status);
 			expect(res.body).toEqual(c.response.body);
+			if (c.response.status >= 300) {
+				expect(res.text).toEqual(c.response.message);
+			}
 		});
 	}
 });
